@@ -53,21 +53,21 @@ async function onSubmit(event) {
             }
 }
 async function onLoad(event) {
+    hideLoadMoreButton();
     showLoader();
 
-    
     try {
         const data = await getImagesByQuery(query, page);
         createGallery(data.hits);
         const firstCard = document.querySelector(".gallery-item");
-        const cardHeight = firstCard.getBoundingClientRect().height;
         if (!firstCard) return;
+        const cardHeight = firstCard.getBoundingClientRect().height;
+        
         window.scrollBy({
         top: cardHeight * 2,
         behavior: "smooth",
         });
         if (page >= totalPages) {
-            hideLoadMoreButton();
             iziToast.info({
             message: "We're sorry, but you've reached the end of search results.",
             position: 'topRight'
@@ -75,11 +75,13 @@ async function onLoad(event) {
             return;    
         }
         page += 1;
+        showLoadMoreButton();
     } catch (error) {
         iziToast.error({
             message: 'Sorry, some error just happen',
             position: "topRight"
-        });                
+        });
+        showLoadMoreButton();
     } finally {
         hideLoader();
     }
