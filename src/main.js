@@ -39,6 +39,13 @@ async function onSubmit(event) {
         totalPages = Math.ceil(data.totalHits/ perPage);
         
         createGallery(data.hits);
+        if (totalPages === 1) {
+            iziToast.info({
+            message: "We're sorry, but you've reached the end of search results.",
+            position: 'topRight'
+            })
+            return;
+        }
         page = 2;
         if (totalPages > 1) {
         showLoadMoreButton();
